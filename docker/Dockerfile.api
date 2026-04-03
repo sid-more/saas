@@ -1,0 +1,22 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+COPY backend/EcommerceSaaS.sln .
+COPY backend/src/ src/
+COPY backend/tests/ tests/
+
+RUN dotnet restore EcommerceSaaS.sln
+RUN dotnet build EcommerceSaaS.sln -c Release --no-restore
+RUN dotnet publish src/EcommerceSaaS.API/EcommerceSaaS.API.csproj -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app/publish .
+
+EXPOSE 5000
+EXPOSE 5001
+
+ENV ASPNETCORE_URLS=http://+:5000
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+ENTRYPOINT ["dotnet", "EcommerceSaaS.API.dll"]

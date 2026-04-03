@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    container_name: ecommerce-saas-db
+    environment:
+      POSTGRES_DB: ecommerce_saas
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ecommerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    container_name: ecommerce-saas-api
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=ecommerce_saas;Username=postgres;Password=postgres"
+      ASPNETCORE_ENVIRONMENT: Development
+      Jwt__Secret: "your-super-secret-key-min-32-characters-long-for-hs256"
+      Jwt__Issuer: "EcommerceSaaS"
+      Jwt__Audience: "EcommerceSaaSUsers"
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - ecommerce-network
+    volumes:
+      - ../backend:/src
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    container_name: ecommerce-saas-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: "http://localhost:5000/api"
+    depends_on:
+      - api
+    networks:
+      - ecommerce-network
+    volumes:
+      - ../frontend:/app
+
+volumes:
+  postgres_data:
+
+networks:
+  ecommerce-network:
+    driver: bridge

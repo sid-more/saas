@@ -1,0 +1,49 @@
+# Backend .gitignore
+## User-specific files
+.vs/
+.vscode/
+*.suo
+*.sln.docstates
+*.user
+*.userprefs
+*.userosscache
+
+## Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+bin/
+obj/
+Bin/
+Obj/
+
+## IDE
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+## NuGet
+*.nupkg
+.nuget
+packages/
+.nuget/
+
+## Application
+appsettings.Development.json
+appsettings.Production.json
+logs/
+
+## Environment
+.env
+.env.local
+
+## Database
+*.db
+*.mdf
+*.ldf
