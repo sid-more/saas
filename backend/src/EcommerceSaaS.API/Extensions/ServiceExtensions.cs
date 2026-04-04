@@ -6,6 +6,7 @@ using EcommerceSaaS.Infrastructure.Repositories;
 using EcommerceSaaS.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using EcommerceSaaS.API.Middleware;
 
 namespace EcommerceSaaS.API.Extensions;
 

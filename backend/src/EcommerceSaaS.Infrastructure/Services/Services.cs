@@ -6,6 +6,7 @@ using BCrypt.Net;
 using EcommerceSaaS.Domain.Entities;
 using EcommerceSaaS.Domain.Enums;
 using EcommerceSaaS.Infrastructure.Repositories;
+using Microsoft.Extensions.Configuration;
 
 namespace EcommerceSaaS.Infrastructure.Services;
 

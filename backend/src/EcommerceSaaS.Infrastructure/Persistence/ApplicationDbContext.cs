@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using EcommerceSaaS.Domain.Entities;
 using EcommerceSaaS.Domain.Enums;
+using System.Linq.Expressions;
 
 namespace EcommerceSaaS.Infrastructure.Persistence;
 
@@ -50,8 +51,16 @@ public class ApplicationDbContext : DbContext
         foreach (var entityType in entityTypes)
         {
             modelBuilder.Entity(entityType.ClrType)
-                .HasQueryFilter(e => !((Entity)e).IsDeleted);
+                .HasQueryFilter(BuildIsDeletedFilter(entityType.ClrType));
         }
+    }
+
+    private static LambdaExpression BuildIsDeletedFilter(Type entityType)
+    {
+        var parameter = Expression.Parameter(entityType, "e");
+        var property = Expression.Property(parameter, nameof(Entity.IsDeleted));
+        var notProperty = Expression.Not(property);
+        return Expression.Lambda(notProperty, parameter);
     }
 
     private static void ConfigureTenant(ModelBuilder modelBuilder)

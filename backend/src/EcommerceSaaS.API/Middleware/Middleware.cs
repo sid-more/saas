@@ -24,7 +24,7 @@ public class TenantMiddleware
         await _next(context);
     }
 
-    private static Guid ResolveTenantId(HttpContext context)
+    private Guid ResolveTenantId(HttpContext context)
     {
         // Try to get from header
         if (context.Request.Headers.TryGetValue("X-Tenant-Id", out var tenantIdHeader))

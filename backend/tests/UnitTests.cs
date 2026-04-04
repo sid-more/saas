@@ -4,6 +4,7 @@ using Moq;
 using EcommerceSaaS.Infrastructure.Repositories;
 using EcommerceSaaS.Domain.Entities;
 using EcommerceSaaS.Domain.Enums;
+using Microsoft.Extensions.Configuration;
 
 namespace EcommerceSaaS.Tests;
 
