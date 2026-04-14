@@ -5,7 +5,7 @@ import ProductCard from '@/components/ProductCard';
 import { toast } from 'react-toastify';
 
 export default function ProductsPage() {
-  const { products, loading, error, fetchProducts, page, setPage, total, pageSize } = useProducts();
+  const { products, loading, error, fetchProducts, page, setPage, total } = useProducts();
   const [tenantId] = useState('00000000-0000-0000-0000-000000000001');
   const [searchTerm, setSearchTerm] = useState('');
   const addToCart = useCartStore((state) => state.addItem);

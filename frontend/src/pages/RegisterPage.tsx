@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-  const { register, loading } = useAuth();
+  const { register, loading, error: apiError } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
@@ -12,7 +12,7 @@ export default function RegisterPage() {
     password: '',
     confirmPassword: '',
   });
-  const [error, setError] = useState('');
+  const [formError, setFormError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -23,15 +23,15 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setFormError('');
 
     if (!formData.email || !formData.firstName || !formData.lastName || !formData.password) {
-      setError('Please fill in all fields');
+      setFormError('Please fill in all fields');
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setFormError('Passwords do not match');
       return;
     }
 
@@ -53,9 +53,9 @@ export default function RegisterPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2 text-center">Create Account</h1>
         <p className="text-gray-600 text-center mb-8">Join EcommerceSaaS today</p>
 
-        {error && (
+        {(formError || apiError) && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
-            {error}
+            {formError || apiError}
           </div>
         )}
 

@@ -36,14 +36,16 @@ public class Tenant : Entity
     public int MaxUsers { get; set; }
     public DateTime? SubscriptionExpiry { get; set; }
 
-    public Tenant(string name, string slug, SubscriptionPlan plan = SubscriptionPlan.Freemium)
+    public Tenant() { }
+
+    public Tenant(string name, string slug, SubscriptionPlan subscriptionPlan = SubscriptionPlan.Freemium)
     {
         TenantId = Guid.NewGuid();
         Name = name ?? throw new ArgumentNullException(nameof(name));
         Slug = slug ?? throw new ArgumentNullException(nameof(slug));
-        SubscriptionPlan = plan;
+        SubscriptionPlan = subscriptionPlan;
         Status = TenantStatus.Active;
-        MaxProducts = plan switch
+        MaxProducts = subscriptionPlan switch
         {
             SubscriptionPlan.Freemium => 10,
             SubscriptionPlan.Starter => 100,
@@ -51,7 +53,7 @@ public class Tenant : Entity
             SubscriptionPlan.Enterprise => int.MaxValue,
             _ => 10
         };
-        MaxUsers = plan switch
+        MaxUsers = subscriptionPlan switch
         {
             SubscriptionPlan.Freemium => 1,
             SubscriptionPlan.Starter => 5,

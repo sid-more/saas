@@ -12,7 +12,13 @@ export const useAuth = () => {
     setError(null);
     try {
       const response = await apiClient.register(email, firstName, lastName, password);
-      return response.data.success;
+      if (response.data.success) {
+        return true;
+      }
+
+      const apiMessage = response.data.message || 'Registration failed';
+      setError(apiMessage);
+      return false;
     } catch (err: any) {
       const message = err.response?.data?.message || 'Registration failed';
       setError(message);
@@ -31,6 +37,9 @@ export const useAuth = () => {
         setAuth(response.data.data);
         return true;
       }
+
+      const apiMessage = response.data.message || 'Login failed';
+      setError(apiMessage);
       return false;
     } catch (err: any) {
       const message = err.response?.data?.message || 'Login failed';
@@ -50,8 +59,6 @@ export const useAuth = () => {
       try {
         const response = await apiClient.getProfile();
         if (response.data.success) {
-          const { user } = response.data.data;
-          // Update user in store
           return true;
         }
       } catch (err) {

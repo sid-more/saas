@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
-import { useAuthStore } from '@/context/store';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { login, loading } = useAuth();
-  const { setAuth } = useAuthStore();
+  const { login, loading, error: apiError } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -19,18 +17,16 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setLocalError('');
 
     if (!formData.email || !formData.password) {
-      setError('Please fill in all fields');
+      setLocalError('Please fill in all fields');
       return;
     }
 
     const success = await login(formData.email, formData.password);
     if (success) {
       navigate('/');
-    } else {
-      setError('Invalid email or password');
     }
   };
 
@@ -40,9 +36,9 @@ export default function LoginPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2 text-center">Welcome Back</h1>
         <p className="text-gray-600 text-center mb-8">Sign in to your account</p>
 
-        {error && (
+        {(localError || apiError) && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
-            {error}
+            {localError || apiError}
           </div>
         )}
 

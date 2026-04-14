@@ -12,7 +12,7 @@ import AdminDashboard from '@/pages/AdminDashboard';
 import NotFound from '@/pages/NotFound';
 import Layout from '@/components/Layout';
 
-const ProtectedRoute = ({ element, requiredRole }: { element: JSX.Element; requiredRole?: number }) => {
+const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
   const { isAuthenticated } = useAuthStore();
 
   if (!isAuthenticated()) {
